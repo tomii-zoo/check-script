@@ -1,3 +1,11 @@
+//--------------------------------------------------
+// 印刷レイアウトのカスタマイズ
+// https://cybozu.dev/ja/kintone/tips/development/customize/print-customize/customize-print-screen/
+//--------------------------------------------------
+
+// 印刷画面表示時にCSSを適用
+// 
+
 (() => {
 	'use strict';
   
@@ -41,42 +49,18 @@
 	  '備考',
 	];
   
-	// 表示対象のフィールド
-	const dispFieldsClassName = [
-	  // 誰か
-	  'tantou',
-	  'customer',
-  
-	  // 契約条件
-	  'expire_data',
-	  'place',
-	  'limit',
-	  'date',
-  
-	  // 金額
-	  'total',
-	  'total_tax',
-  
-	  // テーブル部品
-	  'soft_table',
-	  'hard_table',
-	  'work_table',
-	  'custom_table',
-  
-	  // テーブル合計情報
-	  'soft_total',
-	  'hard_total',
-	  'work_total',
-	  'custom_total',
-	  'total_table',
-  
-	  // 備考欄
-	  'note',
-	];
-  
 	const cssData = `
 	  <style>
-    
+  
+	  /*
+		印刷レイアウトのカスタマイズ
+		https://cybozu.dev/ja/kintone/tips/development/customize/print-customize/customize-print-screen/
+  
+		■基本的な考え方
+		・ページは1行, 2行, 3行…と行単位で構造化されている（これは配置する時と同じロジック）
+		・全要素はセレクタでユニークに参照可能
+	  */
+  
 	  @page {
 		margin: 0mm 5mm;
 		size: A4 portrait;
@@ -175,6 +159,7 @@
 		'見積日',
   
 		'御見積金額',
+		'消費税金額',
 		'税込金額',
   
 		'ソフトウェア小計',
@@ -182,6 +167,12 @@
 		'作業費小計',
 		'カスタマイズ小計',
 		'合計金額',
+  
+		'見積りID',
+		'所在地',
+		'TEL_FAX',
+		'部署',
+		'担当者',
 	  ];
   
 	  hideBorders.forEach((field) => {
@@ -208,6 +199,15 @@
 	  note.style.backgroundColor = "gray";
 	  note.style.height = "200px";
 	  
+  
+	  const busho = EL("部署");
+	  busho.style.backgroundColor = "gray";
+  
+	  // 行を追加していく。(row-gaia clearFix-cybozu)
+	  // ただ、行の構成が変わると問題が起きる。
+	  // ラベルは部品参照できない。
+	  //
+  
 	  return event;
 	});
   
